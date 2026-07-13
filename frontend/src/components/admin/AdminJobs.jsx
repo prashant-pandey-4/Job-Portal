@@ -3,13 +3,17 @@ import Navbar from '../shared/Navbar'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button' 
 import { useNavigate } from 'react-router-dom' 
-import { useDispatch } from 'react-redux' 
+import { useDispatch, useSelector } from 'react-redux' 
 import AdminJobsTable from './AdminJobsTable'
 import useGetAllAdminJobs from '@/hooks/useGetAllAdminJobs'
 import { setSearchJobByText } from '@/redux/jobSlice'
+import axios from 'axios'
+import { COMPANY_API_END_POINT } from '@/utils/constant'
+import { setCompanies } from '@/redux/companySlice'
 
 const AdminJobs = () => {
   useGetAllAdminJobs();
+  const [loadingCompanies, setLoadingCompanies] = useState(true);
   const [input, setInput] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -17,6 +21,28 @@ const AdminJobs = () => {
   useEffect(() => {
     dispatch(setSearchJobByText(input));
   }, [input, dispatch]);
+
+  useEffect(() => {
+    const checkCompany = async () => {
+      try {
+        const res = await axios.get(`${COMPANY_API_END_POINT}/get`, { withCredentials: true });
+        if(res.data.success){
+          dispatch(setCompanies(res.data.companies));
+          if(res.data.companies.length === 0){
+             navigate("/admin/companies/create");
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoadingCompanies(false);
+      }
+    };
+    checkCompany();
+  }, [navigate, dispatch]);
+
+  if (loadingCompanies) return null; // Or a spinner
+
   return (
     <div>
       <Navbar />

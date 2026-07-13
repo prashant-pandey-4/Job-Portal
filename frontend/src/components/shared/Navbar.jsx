@@ -12,6 +12,7 @@ import { toast } from "sonner";
 
 const Navbar = () => {
   const { user } = useSelector((store) => store.auth);
+  const { companies } = useSelector((store) => store.company);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -44,10 +45,15 @@ const Navbar = () => {
             {user && user.role === "recruiter" ? (
               <>
                 <li>
-                  <Link to="/admin/companies">Register</Link>
+                  <Link to="/admin/jobs">Dashboard</Link>
                 </li>
                 <li>
-                  <Link to="/admin/jobs">Jobs</Link>
+                  {/* Dynamically link to their single company profile or onboarding */}
+                  <Link to={companies?.length > 0 
+                    ? `/admin/companies/${companies[0]._id}` 
+                    : "/admin/companies/create"}>
+                    Company Profile
+                  </Link>
                 </li>
               </>
             ) : (

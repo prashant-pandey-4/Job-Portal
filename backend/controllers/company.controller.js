@@ -11,14 +11,14 @@ export const registerCompany = async (req, res) => {
                 success: false
             });
         }
-        let company = await Company.findOne({ name: companyName });
-        if (company) {
+        let existingCompany = await Company.findOne({ userId: req.id });
+        if (existingCompany) {
             return res.status(400).json({
-                message: "You can't register same company.",
+                message: "You can only register one company per account.",
                 success: false
             })
         };
-        company = await Company.create({
+        const company = await Company.create({
             name: companyName,
             userId: req.id
         });
@@ -74,12 +74,18 @@ export const updateCompany = async (req, res) => {
         const { name, description, website, location } = req.body;
  
         const file = req.file;
-        // idhar cloudinary ayega
-        const fileUri = getDataUri(file);
-        const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
-        const logo = cloudResponse.secure_url;
+        let logo;
+        
+        if (file) {
+            const fileUri = getDataUri(file);
+            const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+            logo = cloudResponse.secure_url;
+        }
     
-        const updateData = { name, description, website, location, logo };
+        const updateData = { name, description, website, location };
+        if (logo) {
+            updateData.logo = logo;
+        }
 
         const company = await Company.findByIdAndUpdate(req.params.id, updateData, { new: true });
 

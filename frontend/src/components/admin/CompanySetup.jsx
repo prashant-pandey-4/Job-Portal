@@ -123,12 +123,12 @@ const CompanySetup = () => {
                         <div className="space-y-2 md:col-span-2">
                             <Label className="text-gray-700 font-semibold">Website URL</Label>
                             <Input
-                                type="url"
+                                type="text"
                                 name="website"
                                 value={input.website}
                                 onChange={changeEventHandler}
                                 className="bg-gray-50 border-gray-200 focus-visible:ring-purple-500 rounded-xl py-5"
-                                placeholder="https://yourcompany.com"
+                                placeholder="example.com"
                             />
                         </div>
                         <div className="space-y-2 md:col-span-2">

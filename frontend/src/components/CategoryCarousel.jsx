@@ -24,29 +24,29 @@ const CategoryCarousel = () => {
     }
 
     return (
-        <div>
-            <Carousel className="w-full max-w-xl mx-auto my-20">
-                <CarouselContent>
+        <div className="w-full px-12 sm:px-14 max-w-2xl mx-auto my-12 sm:my-16">
+            <Carousel className="w-full">
+                <CarouselContent className="-ml-2 sm:-ml-4">
                     {
                         categories.map((cat, index) => (
-                            <CarouselItem key={`${cat.name}-${index}`} className="md:basis-1/2 lg:basis-1/3">
+                            <CarouselItem key={`${cat.name}-${index}`} className="pl-2 sm:pl-4 basis-full sm:basis-1/2 md:basis-1/3">
                                 <Button 
                                     onClick={()=>searchJobHandler(cat.name)} 
                                     variant="outline" 
-                                    className="rounded-full flex items-center gap-2 hover:bg-[#6A38C2] hover:text-white transition-all duration-300 shadow-sm"
+                                    className="w-full rounded-full flex items-center justify-center gap-2 hover:bg-[#6A38C2] hover:text-white transition-all duration-300 shadow-xs h-10 text-xs sm:text-sm font-medium"
                                 >
-                                    <cat.icon className="w-4 h-4" />
-                                    {cat.name}
+                                    <cat.icon className="w-4 h-4 shrink-0" />
+                                    <span className="truncate">{cat.name}</span>
                                 </Button>
                             </CarouselItem>
                         ))
                     }
                 </CarouselContent>
-                <CarouselPrevious />
-                <CarouselNext />
+                <CarouselPrevious className="-left-10 sm:-left-12 h-8 w-8" />
+                <CarouselNext className="-right-10 sm:-right-12 h-8 w-8" />
             </Carousel>
         </div>
     )
 }
 
-export default CategoryCarousel
+export default CategoryCarousel;
